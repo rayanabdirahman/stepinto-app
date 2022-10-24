@@ -6,9 +6,8 @@ import {
 } from "../../shared/navigation/types";
 import AuthLayout from "../../shared/components/layout/AuthLayout";
 import SignInForm from "./SignInForm";
-import { ISignInModel } from "../../shared/domain/interfaces/auth";
-import { FormikHelpers } from "formik";
 import Link from "../../shared/components/atoms/Link";
+import useSignIn from "./useSignIn";
 
 type Props = AuthScreenProps<AuthStackScreenNames.SIGN_IN>;
 
@@ -20,15 +19,7 @@ const SignInValidationSchema = Yup.object().shape({
 });
 
 const SignIn: React.FC<Props> = ({ navigation }) => {
-  const onSubmit = (values: ISignInModel, actions: FormikHelpers<any>) => {
-    try {
-      console.log(values);
-      actions.setSubmitting(false);
-    } catch (e) {
-      console.log(e);
-      actions.setSubmitting(false);
-    }
-  };
+  const { onSubmit, errorMessage } = useSignIn();
 
   const goToSignUp = () => navigation.navigate("SignUp");
 
@@ -36,6 +27,7 @@ const SignIn: React.FC<Props> = ({ navigation }) => {
     <AuthLayout
       title="Welcome back!"
       subTitle="Enter your credentials to continue"
+      errorMessage={errorMessage}
     >
       <SignInForm
         initialValues={{ email: "", password: "" }}
